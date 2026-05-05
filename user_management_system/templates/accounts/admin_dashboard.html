@@ -1,0 +1,408 @@
+{% extends 'base.html' %}
+
+{% block title %}SuperAdmin Dashboard - UserHub Pro{% endblock %}
+
+{% block content %}
+<!-- Hidden CSRF Token for AJAX requests -->
+<form style="display: none;">
+    {% csrf_token %}
+</form>
+
+<!-- Welcome Header -->
+<div class="row mb-5 slide-in">
+    <div class="col-12">
+        <div class="card" style="background: var(--primary-gradient); color: white;">
+            <div class="card-body text-center py-5">
+                {% if is_superuser %}
+                    <i class="fas fa-crown fa-3x mb-3" style="color: #ffd700;"></i>
+                    <h1 class="display-4 fw-bold mb-3">Welcome, SuperAdmin!</h1>
+                    <p class="lead mb-0">Manage your users with style and efficiency</p>
+                {% elif is_subadmin %}
+                    <i class="fas fa-user-shield fa-3x mb-3" style="color: #ffd700;"></i>
+                    <h1 class="display-4 fw-bold mb-3">Welcome, Admin!</h1>
+                    <p class="lead mb-0">Manage users within your scope</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- User Management Table -->
+<div class="card shadow-lg fade-in" style="animation-delay: 0.5s;">
+    <div class="card-header d-flex justify-content-between align-items-center" style="background: var(--dark-gradient); color: white;">
+        <h5 class="mb-0">
+            <i class="fas fa-table"></i> User Management Center
+        </h5>
+        <div class="d-flex gap-2">
+            <input type="text" id="searchUsers" class="form-control form-control-sm" placeholder="🔍 Search users..." style="width: 200px;">
+            <div class="btn-group" role="group">
+                <button class="btn btn-success btn-sm" onclick="location.href='{% url 'create_user' %}'">
+                    <i class="fas fa-user-plus"></i> Add User
+                </button>
+                <button class="btn btn-primary btn-sm" onclick="location.href='{% url 'bulk_create_users' %}'">
+                    <i class="fas fa-users"></i> Bulk Add
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0" id="usersTable">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-hashtag"></i> ID</th>
+                        <th><i class="fas fa-user"></i> Username</th>
+                        <th><i class="fas fa-id-card"></i> Name</th>
+                        <th><i class="fas fa-envelope"></i> Email</th>
+                        <th><i class="fas fa-user-tag"></i> Role</th>
+                        <th><i class="fas fa-map-marked-alt"></i> States</th>
+                        <th><i class="fas fa-toggle-on"></i> Status</th>
+                        <th><i class="fas fa-tools"></i> Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user_obj in page_obj %}
+                    <tr id="user-row-{{ user_obj.id }}" class="user-row">
+                        <td>
+                            <span class="badge bg-secondary">#{{ user_obj.id }}</span>
+                        </td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="avatar-circle me-2">
+                                    {% if user_obj.profile_image %}
+                                        <img src="{{ user_obj.profile_image.url }}" alt="{{ user_obj.username }}" class="avatar-img">
+                                    {% else %}
+                                        {{ user_obj.username|first|upper }}
+                                    {% endif %}
+                                </div>
+                                <strong>{{ user_obj.username }}</strong>
+                            </div>
+                        </td>
+                        <td>{{ user_obj.name }}</td>
+                        <td>
+                            <a href="mailto:{{ user_obj.email }}" class="text-decoration-none">
+                                {{ user_obj.email }}
+                            </a>
+                        </td>
+                        <td>
+                            {% if user_obj.is_superuser %}
+                                <span class="badge bg-danger">
+                                    <i class="fas fa-crown"></i> Super Admin
+                                </span>
+                            {% elif user_obj.role == 'SUB_ADMIN' %}
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-user-shield"></i> Admin
+                                </span>
+                            {% elif user_obj.role == 'USER' %}
+                                <span class="badge bg-info">
+                                    <i class="fas fa-user"></i> User
+                                </span>
+                            {% else %}
+                                <span class="badge bg-secondary">
+                                    <i class="fas fa-user"></i> User
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if user_obj.is_superuser %}
+                                <span class="badge bg-success">All States</span>
+                            {% elif user_obj.role == 'SUB_ADMIN' %}
+                                {% with states=user_obj.get_accessible_states %}
+                                    {% if states %}
+                                        <div class="states-list">
+                                            {% for state in states|slice:":3" %}
+                                                <span class="badge bg-primary mb-1">{{ state.name }}</span>
+                                            {% endfor %}
+                                            {% if states|length > 3 %}
+                                                <span class="badge bg-secondary mb-1" title="{% for state in states|slice:'3:' %}{{ state.name }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+                                                    +{{ states|length|add:"-3" }} more
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    {% else %}
+                                        <span class="badge bg-success">All States</span>
+                                    {% endif %}
+                                {% endwith %}
+                            {% elif user_obj.role == 'USER' %}
+                                {% with states=user_obj.get_accessible_states %}
+                                    {% if states %}
+                                        <div class="states-list">
+                                            {% for state in states|slice:":3" %}
+                                                <span class="badge bg-primary mb-1">{{ state.name }}</span>
+                                            {% endfor %}
+                                            {% if states|length > 3 %}
+                                                <span class="badge bg-secondary mb-1" title="{% for state in states|slice:'3:' %}{{ state.name }}{% if not forloop.last %}, {% endif %}{% endfor %}">
+                                                    +{{ states|length|add:"-3" }} more
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                    {% else %}
+                                        <span class="text-muted">No states</span>
+                                    {% endif %}
+                                {% endwith %}
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="badge {% if user_obj.is_active %}bg-success{% else %}bg-danger{% endif %} status-badge" 
+                                  id="status-badge-{{ user_obj.id }}">
+                                <i class="fas {% if user_obj.is_active %}fa-check-circle{% else %}fa-times-circle{% endif %}"></i>
+                                {% if user_obj.is_active %}Active{% else %}Inactive{% endif %}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                {% if is_superuser %}
+                                    <!-- Super Admin can do everything -->
+                                    {% if user_obj != user %}
+                                    <!-- Toggle Status -->
+                                    <form method="post" action="{% url 'toggle_user_status' user_obj.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" 
+                                                class="btn btn-sm {% if user_obj.is_active %}btn-outline-danger{% else %}btn-outline-success{% endif %}"
+                                                title="{% if user_obj.is_active %}Deactivate User{% else %}Activate User{% endif %}"
+                                                onclick="return confirm('Are you sure you want to {% if user_obj.is_active %}deactivate{% else %}activate{% endif %} {{ user_obj.username }}?')">
+                                            <i class="fas {% if user_obj.is_active %}fa-user-slash{% else %}fa-user-check{% endif %}"></i>
+                                        </button>
+                                    </form>
+                                    {% endif %}
+                                    
+                                    <!-- Edit User -->
+                                    <a href="{% url 'edit_user' user_obj.id %}" 
+                                       class="btn btn-sm btn-outline-warning ms-1"
+                                       title="Edit User">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    
+                                    {% if user_obj != user %}
+                                    <!-- Reset Password -->
+                                    <a href="{% url 'admin_reset_password' user_obj.id %}" 
+                                       class="btn btn-sm btn-outline-info ms-1"
+                                       title="Reset Password">
+                                        <i class="fas fa-key"></i>
+                                    </a>
+                                    
+                                    <!-- Delete User -->
+                                    <a href="{% url 'delete_user' user_obj.id %}" 
+                                       class="btn btn-sm btn-outline-danger ms-1"
+                                       title="Delete User">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                    {% endif %}
+                                    
+                                {% elif is_subadmin %}
+                                    <!-- Sub-Admin can only edit Users (not other Sub-Admins) -->
+                                    <!-- Edit User -->
+                                    <a href="{% url 'edit_user' user_obj.id %}" 
+                                       class="btn btn-sm btn-outline-warning"
+                                       title="Edit User">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    
+                                    <!-- Reset Password -->
+                                    <a href="{% url 'admin_reset_password' user_obj.id %}" 
+                                       class="btn btn-sm btn-outline-info ms-1"
+                                       title="Reset Password">
+                                        <i class="fas fa-key"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center py-5">
+                            <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                            <h5 class="text-muted">No users found</h5>
+                            <p class="text-muted">Start by creating your first user!</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Pagination -->
+        {% if page_obj.has_other_pages %}
+        <div class="card-footer">
+            <nav aria-label="User pagination">
+                <ul class="pagination justify-content-center mb-0">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">
+                                <i class="fas fa-angle-double-left"></i> First
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}">
+                                <i class="fas fa-angle-left"></i> Previous
+                            </a>
+                        </li>
+                    {% endif %}
+                    
+                    <li class="page-item active">
+                        <span class="page-link">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </li>
+                    
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}">
+                                Next <i class="fas fa-angle-right"></i>
+                            </a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">
+                                Last <i class="fas fa-angle-double-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- System Info Modal -->
+<div class="modal fade" id="systemInfoModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header" style="background: var(--primary-gradient); color: white;">
+                <h5 class="modal-title">
+                    <i class="fas fa-info-circle"></i> System Information
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-server text-primary"></i> Server Info</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>Django Version:</strong> 4.2.27</li>
+                            <li><strong>Python Version:</strong> 3.13.1</li>
+                            <li><strong>Database:</strong> SQLite</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h6><i class="fas fa-chart-bar text-success"></i> Statistics</h6>
+                        <ul class="list-unstyled">
+                            <li><strong>Total Users:</strong> {{ total_users }}</li>
+                            <li><strong>Active Users:</strong> {{ active_users }}</li>
+                            <li><strong>Inactive Users:</strong> {{ inactive_users }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+    overflow: hidden;
+}
+
+.avatar-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.status-badge {
+    animation: statusPulse 2s infinite;
+}
+
+@keyframes statusPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.user-row:hover {
+    background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+}
+
+.page-link {
+    border-radius: 8px;
+    margin: 0 2px;
+    border: none;
+    background: rgba(102, 126, 234, 0.1);
+    color: #667eea;
+}
+
+.page-link:hover {
+    background: var(--primary-gradient);
+    color: white;
+}
+
+.page-item.active .page-link {
+    background: var(--primary-gradient);
+    border: none;
+}
+
+.states-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    max-width: 250px;
+}
+
+.states-list .badge {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Dashboard JavaScript loaded successfully');
+    
+    // Search functionality
+    const searchInput = document.getElementById('searchUsers');
+    const tableRows = document.querySelectorAll('.user-row');
+    
+    console.log('Found', tableRows.length, 'user rows');
+    
+    if (searchInput) {
+        searchInput.addEventListener('input', function() {
+            const searchTerm = this.value.toLowerCase();
+            
+            tableRows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    row.style.display = '';
+                    row.style.animation = 'fadeIn 0.3s ease';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    }
+});
+
+function showSystemInfo() {
+    const modal = new bootstrap.Modal(document.getElementById('systemInfoModal'));
+    modal.show();
+}
+
+function exportUsers() {
+    alert('Export functionality coming soon!');
+}
+</script>
+{% endblock %}

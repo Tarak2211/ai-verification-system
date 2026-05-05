@@ -1,0 +1,298 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile - User Management System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5 mb-5">
+    <div class="col-md-10 col-lg-9">
+        <div class="card shadow-lg">
+            <div class="card-header bg-info text-white py-3">
+                <h4 class="mb-0"><i class="fas fa-user-edit me-2"></i> Edit Profile</h4>
+            </div>
+            <div class="card-body p-5">
+                <div class="row g-4">
+                    <div class="col-md-6">
+                        <form method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            
+                            <div class="mb-5 text-center">
+                                <div class="profile-image-container mb-4">
+                                    {% if user.profile_image %}
+                                        <img src="{{ user.profile_image.url }}" alt="Profile Image" class="profile-image" id="current-image">
+                                    {% else %}
+                                        <div class="default-avatar" id="default-avatar">
+                                            {{ user.name|first|upper }}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                                <label for="{{ form.profile_image.id_for_label }}" class="form-label fw-bold d-block mb-3">
+                                    <i class="fas fa-camera text-primary me-2"></i>Profile Image
+                                </label>
+                                {{ form.profile_image }}
+                                {% if form.profile_image.errors %}
+                                    <div class="text-danger small mt-2">{{ form.profile_image.errors.0 }}</div>
+                                {% endif %}
+                                <div class="form-text mt-2 mb-3">
+                                    Choose a new image to update your profile photo (JPG, PNG, GIF - Max 5MB)
+                                </div>
+                                
+                                <!-- Image Preview -->
+                                <div id="image-preview" class="mt-4" style="display: none;">
+                                    <p class="small text-muted mb-2">New image preview:</p>
+                                    <img id="preview-img" class="profile-image" alt="Preview">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="{{ form.name.id_for_label }}" class="form-label fw-bold d-block mb-2">
+                                    <i class="fas fa-id-card text-success me-2"></i>Full Name
+                                </label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                    <div class="text-danger small mt-2">{{ form.name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-5">
+                                <label for="{{ form.username.id_for_label }}" class="form-label fw-bold d-block mb-2">
+                                    <i class="fas fa-user text-warning me-2"></i>Username
+                                </label>
+                                {{ form.username }}
+                                {% if form.username.errors %}
+                                    <div class="text-danger small mt-2">{{ form.username.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="d-grid mt-4">
+                                <button type="submit" class="btn btn-info btn-lg">
+                                    <i class="fas fa-save"></i> Update Profile
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card bg-light h-100 border-0">
+                            <div class="card-body p-4">
+                                <h5 class="card-title mb-4 fw-bold text-dark">
+                                    <i class="fas fa-info-circle me-2"></i>Account Information
+                                </h5>
+                                
+                                <div class="mb-4 pb-3 border-bottom">
+                                    <strong class="d-block mb-3 text-secondary">Role:</strong>
+                                    <div>
+                                        {% if user.is_superuser %}
+                                            <span class="badge bg-danger fs-6 py-2 px-3">
+                                                <i class="fas fa-crown me-1"></i> Super Admin
+                                            </span>
+                                        {% elif user.role == 'SUB_ADMIN' %}
+                                            <span class="badge bg-warning text-dark fs-6 py-2 px-3">
+                                                <i class="fas fa-user-shield me-1"></i> Admin
+                                            </span>
+                                        {% elif user.role == 'USER' %}
+                                            <span class="badge bg-info fs-6 py-2 px-3">
+                                                <i class="fas fa-user me-1"></i> User
+                                            </span>
+                                        {% else %}
+                                            <span class="badge bg-secondary fs-6 py-2 px-3">
+                                                <i class="fas fa-user me-1"></i> User
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4 pb-3 border-bottom">
+                                    <strong class="d-block mb-3 text-secondary">Assigned States:</strong>
+                                    <div>
+                                        {% if user.is_superuser %}
+                                            <span class="badge bg-success fs-6 py-2 px-3">
+                                                <i class="fas fa-globe me-1"></i> All States
+                                            </span>
+                                        {% else %}
+                                            {% with states=user.get_accessible_states %}
+                                                {% if states %}
+                                                    <div class="states-display-profile">
+                                                        {% for state in states %}
+                                                            <span class="badge bg-primary mb-2 me-1">{{ state.name }}</span>
+                                                        {% endfor %}
+                                                    </div>
+                                                {% else %}
+                                                    {% if user.role == 'SUB_ADMIN' %}
+                                                        <span class="badge bg-success fs-6 py-2 px-3">
+                                                            <i class="fas fa-globe me-1"></i> All States
+                                                        </span>
+                                                    {% else %}
+                                                        <span class="text-muted">No states assigned</span>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endwith %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-4">
+                                    <div class="info-item mb-3">
+                                        <strong class="text-secondary">Email:</strong> 
+                                        <span class="text-dark ms-2">{{ user.email }}</span>
+                                    </div>
+                                    <div class="info-item mb-3">
+                                        <strong class="text-secondary">Member Since:</strong> 
+                                        <span class="text-dark ms-2">{{ user.date_joined|date:"F d, Y" }}</span>
+                                    </div>
+                                    <div class="info-item">
+                                        <strong class="text-secondary">Status:</strong>                                        <span class="ms-2">
+                                    {% if user.is_active %}
+                                        <span class="badge bg-success py-2 px-3">Active</span>
+                                    {% else %}
+                                        <span class="badge bg-danger py-2 px-3">Inactive</span>
+                                    {% endif %}
+                                        </span>
+                                    </div>
+                                </div>
+                                
+                                <div class="alert alert-warning mt-4 mb-0 border-0">
+                                    <small>
+                                        <i class="fas fa-info-circle"></i>
+                                        <strong>Note:</strong> Email address and role cannot be changed. 
+                                        Contact administrator if you need updates.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-image-container {
+    position: relative;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+}
+
+.profile-image {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 5px solid #667eea;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.default-avatar {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background: var(--primary-gradient);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    font-weight: bold;
+    border: 5px solid #667eea;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+    margin: 0 auto;
+}
+
+.states-display-profile {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 100%;
+}
+
+.states-display-profile .badge {
+    font-size: 0.85rem;
+    padding: 8px 14px;
+    font-weight: 500;
+}
+
+.info-item {
+    padding: 0.75rem 0;
+    line-height: 1.8;
+}
+
+.form-label {
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+.form-control, .form-select {
+    padding: 0.85rem 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    border-radius: 0.5rem;
+}
+
+.card {
+    border-radius: 1rem;
+}
+
+.card-header {
+    border-radius: 1rem 1rem 0 0 !important;
+}
+
+.btn-lg {
+    padding: 0.85rem 1.5rem;
+    font-size: 1.1rem;
+    border-radius: 0.5rem;
+}
+
+.badge {
+    font-weight: 500;
+}
+
+.alert {
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+}
+</style>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const fileInput = document.getElementById('{{ form.profile_image.id_for_label }}');
+    const imagePreview = document.getElementById('image-preview');
+    const previewImg = document.getElementById('preview-img');
+    
+    if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            
+            if (file) {
+                // Check file size (5MB limit)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB');
+                    this.value = '';
+                    imagePreview.style.display = 'none';
+                    return;
+                }
+                
+                // Check file type
+                if (!file.type.match('image.*')) {
+                    alert('Please select an image file');
+                    this.value = '';
+                    imagePreview.style.display = 'none';
+                    return;
+                }
+                
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    imagePreview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                imagePreview.style.display = 'none';
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

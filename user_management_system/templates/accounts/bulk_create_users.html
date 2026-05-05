@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Bulk Create Users - User Management System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">
+                    <i class="fas fa-users"></i> Bulk Create Users
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <form method="post">
+                            {% csrf_token %}
+                            
+                            <div class="mb-3">
+                                <label for="users_data" class="form-label">
+                                    <strong>User Data</strong>
+                                    <small class="text-muted">(One user per line)</small>
+                                </label>
+                                <textarea 
+                                    name="users_data" 
+                                    id="users_data" 
+                                    class="form-control" 
+                                    rows="15" 
+                                    placeholder="Enter user data in CSV format:
+username1,email1@example.com,Full Name 1,password123
+username2,email2@example.com,Full Name 2,password456
+username3,email3@example.com,Full Name 3,password789"
+                                    required></textarea>
+                                <div class="form-text">
+                                    <strong>Format:</strong> username,email,full_name,password (comma-separated, one user per line)
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-users"></i> Create Users
+                                </button>
+                                <a href="{% url 'create_user' %}" class="btn btn-outline-success">
+                                    <i class="fas fa-user-plus"></i> Create Single User
+                                </a>
+                                <a href="{% url 'dashboard' %}" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">Instructions</h6>
+                                <ol class="small">
+                                    <li><strong>Format:</strong> Each line should contain exactly 4 values separated by commas</li>
+                                    <li><strong>Order:</strong> username,email,full_name,password</li>
+                                    <li><strong>Requirements:</strong>
+                                        <ul>
+                                            <li>Username must be unique</li>
+                                            <li>Email must be unique and valid</li>
+                                            <li>Password must be 8-128 chars with letters and numbers</li>
+                                        </ul>
+                                    </li>
+                                    <li><strong>Empty lines</strong> will be ignored</li>
+                                </ol>
+                                
+                                <div class="alert alert-warning mt-3">
+                                    <small>
+                                        <i class="fas fa-exclamation-triangle"></i>
+                                        <strong>Important:</strong> All created users will be active by default. 
+                                        You can modify their status later from the dashboard.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card bg-info text-white mt-3">
+                            <div class="card-body">
+                                <h6 class="card-title">Example Data</h6>
+                                <pre class="small mb-0" style="color: white;">john_doe,john@example.com,John Doe,password123
+jane_smith,jane@example.com,Jane Smith,securepass456
+bob_wilson,bob@example.com,Bob Wilson,mypass789</pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

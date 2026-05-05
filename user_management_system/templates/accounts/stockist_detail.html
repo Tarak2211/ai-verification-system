@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ stockist.name }} - Stockist Details{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <a href="{% url 'stockist-list' %}" class="btn btn-secondary mb-3">
+                <i class="fas fa-arrow-left me-2"></i>Back to List
+            </a>
+            <h2><i class="fas fa-building me-2"></i>{{ stockist.name }}</h2>
+            <p class="text-muted">Code: {{ stockist.code }} | State: {{ stockist.state.name }}</p>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filters</h5>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Month/Year</label>
+                    <select name="month_year" class="form-select">
+                        <option value="">All Months</option>
+                        {% for month in available_months %}
+                            <option value="{{ month }}" {% if month == selected_month %}selected{% endif %}>{{ month }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Validation Status</label>
+                    <select name="validation" class="form-select">
+                        <option value="">All Status</option>
+                        <option value="MATCHED" {% if selected_validation == 'MATCHED' %}selected{% endif %}>Matched</option>
+                        <option value="QUANTITY_MISMATCH" {% if selected_validation == 'QUANTITY_MISMATCH' %}selected{% endif %}>Quantity Mismatch</option>
+                        <option value="DIVISION_MISMATCH" {% if selected_validation == 'DIVISION_MISMATCH' %}selected{% endif %}>Division Mismatch</option>
+                        <option value="PRODUCT_NOT_FOUND" {% if selected_validation == 'PRODUCT_NOT_FOUND' %}selected{% endif %}>Product Not Found</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search me-2"></i>Apply Filters</button>
+                    <a href="{% url 'stockist-detail' stockist.code %}" class="btn btn-secondary"><i class="fas fa-times me-2"></i>Clear</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Product Matches -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-box me-2"></i>Product Matches ({{ total_matches }} records)</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>Row</th>
+                            <th>Month</th>
+                            <th>PDF Product</th>
+                            <th>Excel Product</th>
+                            <th>PDF Qty</th>
+                            <th>Excel Qty</th>
+                            <th>Variance</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for match in page_obj %}
+                        <tr>
+                            <td>{{ match.row_index }}</td>
+                            <td>{{ match.month_year }}</td>
+                            <td>
+                                <small>{{ match.pdf_product }}</small>
+                                {% if match.pdf_division %}
+                                    <br><span class="badge bg-secondary">{{ match.pdf_division }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if match.excel_product %}
+                                    <small>{{ match.excel_product.name }}</small>
+                                    {% if match.excel_division %}
+                                        <br><span class="badge bg-info">{{ match.excel_division.name }}</span>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted">-</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ match.pdf_closing }}</td>
+                            <td>{{ match.excel_closing }}</td>
+                            <td>
+                                {% if match.variance != 0 %}
+                                    <span class="text-danger fw-bold">{{ match.variance }}</span>
+                                {% else %}
+                                    <span class="text-success">0</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if match.validation == 'MATCHED' %}
+                                    <span class="badge bg-success">Matched</span>
+                                {% elif match.validation == 'QUANTITY_MISMATCH' %}
+                                    <span class="badge bg-warning text-dark">Qty Mismatch</span>
+                                {% elif match.validation == 'DIVISION_MISMATCH' %}
+                                    <span class="badge bg-warning text-dark">Div Mismatch</span>
+                                {% elif match.validation == 'PRODUCT_NOT_FOUND' %}
+                                    <span class="badge bg-danger">Not Found</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">{{ match.validation }}</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center text-muted">No product matches found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            {% if page_obj.has_other_pages %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mt-3">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1{% if selected_month %}&month_year={{ selected_month }}{% endif %}{% if selected_validation %}&validation={{ selected_validation }}{% endif %}">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if selected_month %}&month_year={{ selected_month }}{% endif %}{% if selected_validation %}&validation={{ selected_validation }}{% endif %}">Previous</a>
+                        </li>
+                    {% endif %}
+
+                    <li class="page-item active">
+                        <span class="page-link">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </li>
+
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if selected_month %}&month_year={{ selected_month }}{% endif %}{% if selected_validation %}&validation={{ selected_validation }}{% endif %}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if selected_month %}&month_year={{ selected_month }}{% endif %}{% if selected_validation %}&validation={{ selected_validation }}{% endif %}">Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

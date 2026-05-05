@@ -1,0 +1,165 @@
+{% extends 'base.html' %}
+
+{% block title %}{% if form.instance.pk %}Edit User{% else %}Create User{% endif %} - RBAC{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card fade-in">
+            <div class="card-header" style="background: var(--primary-gradient); color: white;">
+                <h4 class="mb-0">
+                    <i class="fas fa-user-plus"></i>
+                    {% if form.instance.pk %}Edit User{% else %}Create New User{% endif %}
+                </h4>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.username.id_for_label }}" class="form-label">
+                                <i class="fas fa-user"></i> Username *
+                            </label>
+                            {{ form.username }}
+                            {% if form.username.errors %}
+                                <div class="text-danger small">{{ form.username.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.email.id_for_label }}" class="form-label">
+                                <i class="fas fa-envelope"></i> Email *
+                            </label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="text-danger small">{{ form.email.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.name.id_for_label }}" class="form-label">
+                            <i class="fas fa-id-card"></i> Full Name *
+                        </label>
+                        {{ form.name }}
+                        {% if form.name.errors %}
+                            <div class="text-danger small">{{ form.name.errors }}</div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.role.id_for_label }}" class="form-label">
+                            <i class="fas fa-user-tag"></i> Role *
+                        </label>
+                        {{ form.role }}
+                        {% if form.role.errors %}
+                            <div class="text-danger small">{{ form.role.errors }}</div>
+                        {% endif %}
+                        <small class="form-text text-muted">
+                            {% if user.is_super_admin %}
+                                Super Admins can create Sub-Admins and Users
+                            {% elif user.is_sub_admin %}
+                                Sub-Admins can only create Users
+                            {% endif %}
+                        </small>
+                    </div>
+                    
+                    {% if not form.instance.pk %}
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.password1.id_for_label }}" class="form-label">
+                                <i class="fas fa-lock"></i> Password *
+                            </label>
+                            {{ form.password1 }}
+                            {% if form.password1.errors %}
+                                <div class="text-danger small">{{ form.password1.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="{{ form.password2.id_for_label }}" class="form-label">
+                                <i class="fas fa-lock"></i> Confirm Password *
+                            </label>
+                            {{ form.password2 }}
+                            {% if form.password2.errors %}
+                                <div class="text-danger small">{{ form.password2.errors }}</div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if form.instance.pk %}
+                    <div class="mb-3">
+                        <div class="form-check">
+                            {{ form.is_active }}
+                            <label class="form-check-label" for="{{ form.is_active.id_for_label }}">
+                                Account is Active
+                            </label>
+                        </div>
+                        {% if form.is_active.errors %}
+                            <div class="text-danger small">{{ form.is_active.errors }}</div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mb-3" id="states-section">
+                        <label class="form-label">
+                            <i class="fas fa-map-marker-alt"></i> State Permissions
+                        </label>
+                        <div class="card">
+                            <div class="card-body">
+                                {{ form.states }}
+                                {% if form.states.errors %}
+                                    <div class="text-danger small">{{ form.states.errors }}</div>
+                                {% endif %}
+                                <small class="form-text text-muted d-block mt-2">
+                                    {{ form.states.help_text }}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-4">
+                        <a href="{% url 'rbac-user-list' %}" class="btn btn-secondary">
+                            <i class="fas fa-arrow-left"></i> Cancel
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            {% if form.instance.pk %}Update User{% else %}Create User{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Show/hide states based on role selection
+    document.addEventListener('DOMContentLoaded', function() {
+        const roleField = document.getElementById('{{ form.role.id_for_label }}');
+        const statesSection = document.getElementById('states-section');
+        
+        function toggleStatesSection() {
+            const selectedRole = roleField.value;
+            if (selectedRole === 'USER') {
+                statesSection.style.display = 'block';
+            } else {
+                statesSection.style.display = 'none';
+            }
+        }
+        
+        roleField.addEventListener('change', toggleStatesSection);
+        toggleStatesSection(); // Initial check
+    });
+</script>
+{% endblock %}

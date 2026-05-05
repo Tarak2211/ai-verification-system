@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit User - User Management System{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">
+                    <i class="fas fa-user-edit"></i> Edit User: {{ user_obj.username }}
+                </h4>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <form method="post">
+                            {% csrf_token %}
+                            
+                            <div class="mb-3">
+                                <label for="{{ form.username.id_for_label }}" class="form-label fw-bold">
+                                    <i class="fas fa-user text-primary me-2"></i>Username
+                                </label>
+                                {{ form.username }}
+                                {% if form.username.errors %}
+                                    <div class="text-danger small">{{ form.username.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.email.id_for_label }}" class="form-label fw-bold">
+                                    <i class="fas fa-envelope text-warning me-2"></i>Email Address
+                                </label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                    <div class="text-danger small">{{ form.email.errors.0 }}</div>
+                                {% endif %}
+                                <div class="form-text">
+                                    <i class="fas fa-exclamation-triangle text-warning"></i>
+                                    Changing email should be done carefully as it's used for login.
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.name.id_for_label }}" class="form-label fw-bold">
+                                    <i class="fas fa-id-card text-success me-2"></i>Full Name
+                                </label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                    <div class="text-danger small">{{ form.name.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.role.id_for_label }}" class="form-label fw-bold">
+                                    <i class="fas fa-user-tag text-info me-2"></i>Role
+                                </label>
+                                {{ form.role }}
+                                {% if form.role.errors %}
+                                    <div class="text-danger small">{{ form.role.errors.0 }}</div>
+                                {% endif %}
+                                <small class="text-muted d-block mt-1">{{ form.role.help_text }}</small>
+                            </div>
+
+                            <!-- States Selection -->
+                            <div class="mb-3" id="states_section">
+                                <label class="form-label fw-bold">
+                                    <i class="fas fa-map-marked-alt text-success me-2"></i>Assign States
+                                </label>
+                                <div class="border rounded p-3" style="max-height: 250px; overflow-y: auto; background-color: #f8f9fa;">
+                                    {{ form.states }}
+                                </div>
+                                {% if form.states.errors %}
+                                    <div class="text-danger small mt-1">{{ form.states.errors.0 }}</div>
+                                {% endif %}
+                                <small class="text-muted d-block mt-1" id="states_help_text">
+                                    Select at least one state for User role
+                                </small>
+                            </div>
+
+                            <div class="mb-3">
+                                <div class="form-check">
+                                    {{ form.is_active }}
+                                    <label class="form-check-label fw-bold" for="{{ form.is_active.id_for_label }}">
+                                        <i class="fas fa-toggle-on text-success me-2"></i>Account is Active
+                                    </label>
+                                </div>
+                                {% if form.is_active.errors %}
+                                    <div class="text-danger small">{{ form.is_active.errors.0 }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-warning btn-lg">
+                                    <i class="fas fa-save"></i> Update User
+                                </button>
+                                <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-lg">
+                                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                                </a>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card bg-light">
+                            <div class="card-body">
+                                <h6 class="card-title">Current User Information</h6>
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td><strong>User ID:</strong></td>
+                                        <td>{{ user_obj.id }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Current Role:</strong></td>
+                                        <td>
+                                            {% if user_obj.is_superuser %}
+                                                <span class="badge bg-danger">Super Admin</span>
+                                            {% elif user_obj.role == 'SUB_ADMIN' %}
+                                                <span class="badge bg-warning text-dark">Admin</span>
+                                            {% elif user_obj.role == 'USER' %}
+                                                <span class="badge bg-info">User</span>
+                                            {% else %}
+                                                <span class="badge bg-secondary">User</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Current States:</strong></td>
+                                        <td>
+                                            {% if user_obj.is_superuser %}
+                                                <span class="badge bg-success">All States</span>
+                                            {% else %}
+                                                {% with states=user_obj.get_accessible_states %}
+                                                    {% if states %}
+                                                        <div class="states-display-edit">
+                                                            {% for state in states|slice:":3" %}
+                                                                <span class="badge bg-primary mb-1">{{ state.name }}</span>
+                                                            {% endfor %}
+                                                            {% if states|length > 3 %}
+                                                                <span class="badge bg-secondary mb-1">+{{ states|length|add:"-3" }} more</span>
+                                                            {% endif %}
+                                                        </div>
+                                                    {% else %}
+                                                        {% if user_obj.role == 'SUB_ADMIN' %}
+                                                            <span class="badge bg-success">All States</span>
+                                                        {% else %}
+                                                            <span class="text-muted">No states</span>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endwith %}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Date Joined:</strong></td>
+                                        <td>{{ user_obj.date_joined|date:"F d, Y H:i" }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Last Login:</strong></td>
+                                        <td>
+                                            {% if user_obj.last_login %}
+                                                {{ user_obj.last_login|date:"F d, Y H:i" }}
+                                            {% else %}
+                                                Never
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                </table>
+                                
+                                <div class="alert alert-info mt-3">
+                                    <small>
+                                        <i class="fas fa-info-circle"></i>
+                                        <strong>Admin Privileges:</strong> As a SuperAdmin, you can modify 
+                                        user role and state assignments.
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.state-checkbox {
+    margin-right: 10px;
+}
+
+#states_section label {
+    display: block;
+    margin-bottom: 8px;
+    padding: 5px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+#states_section label:hover {
+    background-color: #e9ecef;
+}
+
+.states-display-edit {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.states-display-edit .badge {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const roleSelect = document.getElementById('id_role');
+    const statesSection = document.getElementById('states_section');
+    const statesHelpText = document.getElementById('states_help_text');
+    const stateCheckboxes = document.querySelectorAll('input[name="states"]');
+    
+    function updateStateFields() {
+        const selectedRole = roleSelect.value;
+        
+        if (selectedRole === 'USER') {
+            // For User role: Show message that at least one state is required
+            statesHelpText.textContent = 'Select at least one state for User role (required)';
+            statesHelpText.style.color = '#dc3545'; // Red color for required
+        } else if (selectedRole === 'SUB_ADMIN') {
+            // For Admin role: Show message about all states
+            statesHelpText.textContent = 'Select specific states or leave all checked for full access. Unchecked = All States.';
+            statesHelpText.style.color = '#28a745'; // Green color for info
+        }
+    }
+    
+    // Initialize on page load
+    if (roleSelect) {
+        updateStateFields();
+        
+        // Update when role changes
+        roleSelect.addEventListener('change', function() {
+            updateStateFields();
+            
+            // If changing to Admin, check all states
+            if (this.value === 'SUB_ADMIN') {
+                stateCheckboxes.forEach(checkbox => {
+                    checkbox.checked = true;
+                });
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}Stockist Dashboard - User Management System{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2><i class="fas fa-chart-line me-2"></i>Stockist Product Matching Dashboard</h2>
+            <p class="text-muted">View and analyze product matching data across your assigned states</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Total Records</h5>
+                    <h2>{{ stats.total_records }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Matched</h5>
+                    <h2>{{ stats.matched }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-dark">
+                <div class="card-body">
+                    <h5 class="card-title">Quantity Mismatch</h5>
+                    <h2>{{ stats.quantity_mismatch }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-danger text-white">
+                <div class="card-body">
+                    <h5 class="card-title">Product Not Found</h5>
+                    <h2>{{ stats.product_not_found }}</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-filter me-2"></i>Filters</h5>
+        </div>
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Month/Year</label>
+                    <select name="month_year" class="form-select">
+                        <option value="">All Months</option>
+                        {% for month in available_months %}
+                            <option value="{{ month }}" {% if month == selected_month %}selected{% endif %}>{{ month }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Validation Status</label>
+                    <select name="validation" class="form-select">
+                        <option value="">All Status</option>
+                        <option value="MATCHED" {% if selected_validation == 'MATCHED' %}selected{% endif %}>Matched</option>
+                        <option value="QUANTITY_MISMATCH" {% if selected_validation == 'QUANTITY_MISMATCH' %}selected{% endif %}>Quantity Mismatch</option>
+                        <option value="DIVISION_MISMATCH" {% if selected_validation == 'DIVISION_MISMATCH' %}selected{% endif %}>Division Mismatch</option>
+                        <option value="PRODUCT_NOT_FOUND" {% if selected_validation == 'PRODUCT_NOT_FOUND' %}selected{% endif %}>Product Not Found</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Division</label>
+                    <select name="division" class="form-select">
+                        <option value="">All Divisions</option>
+                        {% for division in available_divisions %}
+                            <option value="{{ division.name }}" {% if division.name == selected_division %}selected{% endif %}>{{ division.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-search me-2"></i>Apply Filters</button>
+                    <a href="{% url 'stockist-dashboard' %}" class="btn btn-secondary"><i class="fas fa-times me-2"></i>Clear</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="row">
+        <div class="col-md-12 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="fas fa-table me-2"></i>Detailed Data Table</h5>
+                    <p class="card-text">View all product matching data in a comprehensive table with advanced filters</p>
+                    <a href="{% url 'stockist-data-table' %}" class="btn btn-primary">View Data Table</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assigned States -->
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5 class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Your Assigned States</h5>
+        </div>
+        <div class="card-body">
+            {% if user.is_superuser %}
+                <span class="badge bg-success">All States</span>
+            {% else %}
+                {% for state in user_states %}
+                    <span class="badge bg-primary me-2 mb-2">{{ state.name }}</span>
+                {% empty %}
+                    <p class="text-muted">No states assigned</p>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
