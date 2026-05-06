@@ -132,10 +132,10 @@ Access at `http://127.0.0.1:8000/`
 ![Admin Welcome Dashboard](images/Admin%20Welcome%20Dashboard.png)
 
 ### User Dashboard & Profile (2)
-![User Dashboard & Profile (2)](images/UserDashboard%20%26%20Profile%20(2).png)
+![User Dashboard & Profile (2)](images/User%20Dashboard%20%26%20Profile%20(2).png)
 
 ### User Dashboard & Profile (3)
-![User Dashboard & Profile (3)](images/UserDashboard%20%26%20Profile%20(3).png)
+![User Dashboard & Profile (3)](images/User%20Dashboard%20%26%20Profile%20(3).png)
 
 ### Create users and admins
 ![Create users and admins](images/Create%20users%20and%20admins.png)
