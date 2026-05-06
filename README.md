@@ -123,13 +123,13 @@ Access at `http://127.0.0.1:8000/`
 ## 📸 Project Screenshots
 
 ### Home Page
-![Home Page](images/Homepage.png)
+![Home Page](images/Home%20page.png)
 
 ### Login Page
-![Login Page](images/Loginpage.png)
+![Login Page](images/Login%20page.png)
 
 ### Admin Welcome Dashboard
-![Admin Welcome Dashboard](images/AdminWelcomeDashboard.png)
+![Admin Welcome Dashboard](images/Admin%20Welcome%20Dashboard.png)
 
 ### User Dashboard & Profile (2)
 ![User Dashboard & Profile (2)](images/UserDashboard%20%26%20Profile%20(2).png)
