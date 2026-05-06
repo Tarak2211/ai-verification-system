@@ -131,6 +131,9 @@ Access at `http://127.0.0.1:8000/`
 ### Admin Welcome Dashboard
 ![Admin Welcome Dashboard](images/Admin%20Welcome%20Dashboard.png)
 
+### User Dashboard & Profile 
+![User Dashboard & Profile ](images/User%20Dashboard%20&%20Profile.png)
+
 ### User Dashboard & Profile (2)
 ![User Dashboard & Profile (2)](images/User%20Dashboard%20%26%20Profile%20(2).png)
 
