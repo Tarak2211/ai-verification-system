@@ -122,6 +122,8 @@ Access at `http://127.0.0.1:8000/`
 
 ---
 
+---
+
 ## 📸 Project Screenshots
 
 <div align="center">
@@ -182,11 +184,11 @@ Access at `http://127.0.0.1:8000/`
   <img src="images/Users%26adminslist.png" width="800" alt="Users list 2">
   <br><br>
 
-  <h3>🔍 View Database (State Selected)</h3>
+  <h3>🔍 View Database</h3>
   <img src="images/ViewDatabase.png" width="800" alt="View Database">
   <br><br>
 
-  <h3>🔍 View Database (State Selected) (2)</h3>
+  <h3>🔍 View Database (2)</h3>
   <img src="images/ViewDatabase(2).png" width="800" alt="View Database 2">
 
 </div>
