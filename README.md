@@ -122,73 +122,71 @@ Access at `http://127.0.0.1:8000/`
 
 ---
 
----
-
-## 📸 Project Screenshots
+## 📸 All Project Screenshots
 
 <div align="center">
 
   <h3>🏠 Home Page</h3>
-  <img src="images/Homepage.png" width="800" alt="Home Page">
+  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Homepage.png" width="800" alt="Home Page">
   <br><br>
 
   <h3>🔐 Login Page</h3>
-  <img src="images/Loginpage.png" width="800" alt="Login Page">
+  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Loginpage.png" width="800" alt="Login Page">
   <br><br>
 
   <h3>📊 Admin Welcome Dashboard</h3>
-  <img src="images/AdminWelcomeDashboard.png" width="800" alt="Admin Welcome Dashboard">
+  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/AdminWelcomeDashboard.png" width="800" alt="Admin Welcome Dashboard">
   <br><br>
 
   <h3>👤 User Dashboard & Profile (2)</h3>
-  <img src="images/UserDashboard%26Profile(2).png" width="800" alt="User Dashboard & Profile 2">
+  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/UserDashboard%26Profile(2).png" width="800" alt="User Dashboard 2">
   <br><br>
 
   <h3>👤 User Dashboard & Profile (3)</h3>
-  <img src="images/UserDashboard%26Profile(3).png" width="800" alt="User Dashboard & Profile 3">
+  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/UserDashboard%26Profile(3).png" width="800" alt="User Dashboard 3">
   <br><br>
 
   <h3>➕ Create Users and Admins</h3>
-  <img src="images/Createusersandadmins.png" width="800" alt="Create users and admins">
+  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Createusersandadmins.png" width="800" alt="Create Users">
   <br><br>
 
-  <h3>⚡ Admin Assign Full State Automatically</h3>
-  <img src="images/Adminassignfullstateautomatically.png" width="800" alt="Admin assign">
+  <h3>⚡ Admin Automatic Assignment</h3>
+  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Adminassignfullstateautomatically.png" width="800" alt="Admin Assign">
   <br><br>
 
-  <h3>📍 User Assign Only Selected States</h3>
-  <img src="images/userassignonlyselectedstates.png" width="800" alt="User state assignment">
+  <h3>📍 User Selected States</h3>
+  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/userassignonlyselectedstates.png" width="800" alt="User States">
   <br><br>
 
   <h3>🖼️ User Profile</h3>
-  <img src="images/Userprofile.png" width="800" alt="User profile">
+  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Userprofile.png" width="800" alt="User Profile">
   <br><br>
 
   <h3>📂 Database Page</h3>
-  <img src="images/Databasepage.png" width="800" alt="Database page">
+  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Databasepage.png" width="800" alt="Database Page">
   <br><br>
 
   <h3>📂 Database Page (2)</h3>
-  <img src="images/Databasepage(2).png" width="800" alt="Database page 2">
+  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Databasepage(2).png" width="800" alt="Database Page 2">
   <br><br>
 
   <h3>🛡️ Sub-admin Page</h3>
-  <img src="images/Sub-adminpage.png" width="800" alt="Sub-admin page">
+  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Sub-adminpage.png" width="800" alt="Sub Admin">
   <br><br>
 
   <h3>👥 Users & Admin List</h3>
-  <img src="images/Users%26adminlist.png" width="800" alt="Users list">
+  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Users%26adminlist.png" width="800" alt="Users List">
   <br><br>
 
   <h3>👥 Users & Admin List (2)</h3>
-  <img src="images/Users%26adminslist.png" width="800" alt="Users list 2">
+  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Users%26adminslist.png" width="800" alt="Users List 2">
   <br><br>
 
   <h3>🔍 View Database</h3>
-  <img src="images/ViewDatabase.png" width="800" alt="View Database">
+  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/ViewDatabase.png" width="800" alt="View Database">
   <br><br>
 
   <h3>🔍 View Database (2)</h3>
-  <img src="images/ViewDatabase(2).png" width="800" alt="View Database 2">
+  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/ViewDatabase(2).png" width="800" alt="View Database 2">
 
 </div>
