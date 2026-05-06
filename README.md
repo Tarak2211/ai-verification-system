@@ -120,73 +120,52 @@ Access at `http://127.0.0.1:8000/`
 
 ---
 
----
+## 📸 Project Screenshots
 
-## 📸 All Project Screenshots
+### Home Page
+![Home Page](images/Homepage.png)
 
-<div align="center">
+### Login Page
+![Login Page](images/Loginpage.png)
 
-  <h3>🏠 Home Page</h3>
-  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Homepage.png" width="800" alt="Home Page">
-  <br><br>
+### Admin Welcome Dashboard
+![Admin Welcome Dashboard](images/AdminWelcomeDashboard.png)
 
-  <h3>🔐 Login Page</h3>
-  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Loginpage.png" width="800" alt="Login Page">
-  <br><br>
+### User Dashboard & Profile (2)
+![User Dashboard & Profile (2)](images/UserDashboard%20%26%20Profile%20(2).png)
 
-  <h3>📊 Admin Welcome Dashboard</h3>
-  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/AdminWelcomeDashboard.png" width="800" alt="Admin Welcome Dashboard">
-  <br><br>
+### User Dashboard & Profile (3)
+![User Dashboard & Profile (3)](images/UserDashboard%20%26%20Profile%20(3).png)
 
-  <h3>👤 User Dashboard & Profile (2)</h3>
-  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/UserDashboard%26Profile(2).png" width="800" alt="User Dashboard 2">
-  <br><br>
+### Create users and admins
+![Create users and admins](images/Create%20users%20and%20admins.png)
 
-  <h3>👤 User Dashboard & Profile (3)</h3>
-  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/UserDashboard%26Profile(3).png" width="800" alt="User Dashboard 3">
-  <br><br>
+### Admin assign full state automatically
+![Admin assign full state automatically](images/Admin%20assign%20full%20state%20automatically.png)
 
-  <h3>➕ Create Users and Admins</h3>
-  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Createusersandadmins.png" width="800" alt="Create Users">
-  <br><br>
+### user assign only selected states
+![user assign only selected states](images/user%20assign%20only%20selected%20states.png)
 
-  <h3>⚡ Admin Automatic Assignment</h3>
-  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Adminassignfullstateautomatically.png" width="800" alt="Admin Assign">
-  <br><br>
+### User profile
+![User profile](images/User%20profile.png)
 
-  <h3>📍 User Selected States</h3>
-  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/userassignonlyselectedstates.png" width="800" alt="User States">
-  <br><br>
+### Database page
+![Database page](images/Database%20page.png)
 
-  <h3>🖼️ User Profile</h3>
-  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Userprofile.png" width="800" alt="User Profile">
-  <br><br>
+### Database page (2)
+![Database page (2)](images/Database%20page%20(2).png)
 
-  <h3>📂 Database Page</h3>
-  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Databasepage.png" width="800" alt="Database Page">
-  <br><br>
+### Sub-admin page
+![Sub-admin page](images/Sub-admin%20page.png)
 
-  <h3>📂 Database Page (2)</h3>
-  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Databasepage(2).png" width="800" alt="Database Page 2">
-  <br><br>
+### Users & admin list
+![Users & admin list](images/Users%20%26%20admin%20list.png)
 
-  <h3>🛡️ Sub-admin Page</h3>
-  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Sub-adminpage.png" width="800" alt="Sub Admin">
-  <br><br>
+### Users & admin list (2)
+![Users & admin list (2)](images/Users%20%26%20admins%20list.png)
 
-  <h3>👥 Users & Admin List</h3>
-  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Users%26adminlist.png" width="800" alt="Users List">
-  <br><br>
+### View Database (only State selected)
+![View Database(only State selected)](images/View%20Database.png)
 
-  <h3>👥 Users & Admin List (2)</h3>
-  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/Users%26adminslist.png" width="800" alt="Users List 2">
-  <br><br>
-
-  <h3>🔍 View Database</h3>
-  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/ViewDatabase.png" width="800" alt="View Database">
-  <br><br>
-
-  <h3>🔍 View Database (2)</h3>
-  <img src="https://raw.githubusercontent.com/Tarak2211/ai-verification-system/main/images/ViewDatabase(2).png" width="800" alt="View Database 2">
-
-</div>
+### View Database (only State selected) (2)
+![View Database(only State selected) (2)](images/View%20Database%20(2).png)
