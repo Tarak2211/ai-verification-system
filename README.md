@@ -4,37 +4,6 @@ A Django-based web application for managing users with role-based access control
 
 ---
 
-## Screenshots
-
-### Home Page
-![Home Page](screenshots/01_home.png)
-
-### Login Page
-![Login Page](screenshots/02_login.png)
-
-### Super Admin Dashboard
-![Super Admin Dashboard](screenshots/03_superadmin_dashboard.png)
-
-### Admin Dashboard
-![Admin Dashboard](screenshots/04_admin_dashboard.png)
-
-### User Management Center
-![User Management](screenshots/05_user_management.png)
-
-### User Dashboard
-![User Dashboard](screenshots/06_user_dashboard.png)
-
-### Create New User
-![Create User](screenshots/07_create_user.png)
-
-### Stockist Product Matching Data
-![Stockist Data](screenshots/08_stockist_data.png)
-
-### Stockist Filters & Records
-![Stockist Filters](screenshots/09_stockist_filters.png)
-
----
-
 ## What Was Built
 
 ### 1. Authentication
@@ -148,3 +117,34 @@ Access at `http://127.0.0.1:8000/`
 | `/accounts/stockist/dashboard/` | Stockist dashboard |
 | `/accounts/stockist/data/table/` | Stockist data table |
 | `/accounts/stockist/reports/mismatches/` | Mismatch report |
+
+---
+
+## Screenshots
+
+### Home Page
+![Home Page](screenshots/01_home.png)
+
+### Login Page
+![Login Page](screenshots/02_login.png)
+
+### Super Admin Dashboard
+![Super Admin Dashboard](screenshots/03_superadmin_dashboard.png)
+
+### Admin Dashboard
+![Admin Dashboard](screenshots/04_admin_dashboard.png)
+
+### User Management Center
+![User Management](screenshots/05_user_management.png)
+
+### User Dashboard
+![User Dashboard](screenshots/06_user_dashboard.png)
+
+### Create New User
+![Create User](screenshots/07_create_user.png)
+
+### Stockist Product Matching Data
+![Stockist Data](screenshots/08_stockist_data.png)
+
+### Stockist Filters & Records
+![Stockist Filters](screenshots/09_stockist_filters.png)
