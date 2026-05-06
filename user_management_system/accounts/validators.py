@@ -5,22 +5,22 @@ from django.utils.translation import gettext as _
 
 class AlphanumericSpecialPasswordValidator:
     """
-    Validate that the password contains alphabetic characters and special characters.
+    Validate that the password contains both alphabetic characters and numbers.
     """
     def validate(self, password, user=None):
         if not re.search(r'[A-Za-z]', password):
             raise ValidationError(
-                _("Password must contain at least one alphabetic character."),
+                _("Password must contain at least one letter (a-z or A-Z)."),
                 code='password_no_letter',
             )
-        if not re.search(r'[!@#$%^&*()_+\-=\[\]{};\':"\\|,.<>\/?]', password):
+        if not re.search(r'[0-9]', password):
             raise ValidationError(
-                _("Password must contain at least one special character (!@#$%^&*()_+-=[]{}|;':\",./<>?)."),
-                code='password_no_special',
+                _("Password must contain at least one number (0-9)."),
+                code='password_no_number',
             )
 
     def get_help_text(self):
-        return _("Your password must contain at least one alphabetic character and one special character.")
+        return _("Your password must contain at least one letter and one number.")
 
 
 class MinMaxLengthValidator:

@@ -4,10 +4,10 @@
 
 {% block content %}
 <!-- Hero Section -->
-<div class="row mb-5">
+<div class="row mb-3">
     <div class="col-12">
-        <div class="card text-center" style="background: var(--primary-gradient); color: white; min-height: 500px;">
-            <div class="card-body d-flex flex-column justify-content-center py-5">
+        <div class="card text-center" style="background: var(--primary-gradient); color: white;">
+            <div class="card-body d-flex flex-column justify-content-center py-3">
                 {% if user.is_authenticated %}
                 <h1 class="display-2 fw-bold mb-4" style="font-size: 4rem;">Welcome back, {{ user.name }}! 👋</h1>
                 <p class="lead mb-5" style="font-size: 1.3rem; max-width: 800px; margin: 0 auto;">
@@ -92,17 +92,17 @@
                 </div>
                 
                 {% else %}
-                <h1 class="display-3 fw-bold mb-4">Welcome to UserHub Pro</h1>
-                <p class="lead mb-4">The most advanced user management system for modern businesses</p>
+                <h1 class="display-5 fw-bold mb-2">Welcome to UserHub Pro</h1>
+                <p class="mb-2">The most advanced user management system for modern businesses</p>
                 {% endif %}
                 
                 {% if not user.is_authenticated %}
                 <!-- Guest user options -->
-                <div class="d-flex gap-3 justify-content-center">
-                    <a href="{% url 'register' %}" class="btn btn-light btn-lg px-5">
+                <div class="d-flex gap-3 justify-content-center mt-2">
+                    <a href="{% url 'register' %}" class="btn btn-light px-4">
                         <i class="fas fa-user-plus me-2"></i>Create Account
                     </a>
-                    <a href="{% url 'login' %}" class="btn btn-outline-light btn-lg px-5">
+                    <a href="{% url 'login' %}" class="btn btn-outline-light px-4">
                         <i class="fas fa-sign-in-alt me-2"></i>Login
                     </a>
                 </div>
@@ -114,13 +114,13 @@
 
 {% if not user.is_authenticated %}
 <!-- Registration CTA -->
-<div class="row mb-5">
+<div class="row mb-3">
     <div class="col-12">
         <div class="card" style="background: var(--success-gradient); color: white;">
-            <div class="card-body text-center py-5">
-                <h3 class="fw-bold mb-3">Ready to Get Started?</h3>
-                <p class="lead mb-4">Join thousands of users who trust UserHub Pro for their account management needs.</p>
-                <a href="{% url 'register' %}" class="btn btn-light btn-lg px-5">
+            <div class="card-body text-center py-3">
+                <h5 class="fw-bold mb-1">Ready to Get Started?</h5>
+                <p class="mb-2" style="font-size:0.9rem;">Join thousands of users who trust UserHub Pro for their account management needs.</p>
+                <a href="{% url 'register' %}" class="btn btn-light px-4">
                     <i class="fas fa-rocket me-2"></i>Create Your Account Now
                 </a>
             </div>
@@ -134,18 +134,18 @@
 <div class="row">
     <div class="col-md-6 offset-md-3">
         <div class="card">
-            <div class="card-header text-center" style="background: var(--dark-gradient); color: white;">
-                <h5 class="mb-0">
-                    <i class="fas fa-sign-in-alt"></i> Already Have an Account?
-                </h5>
+            <div class="card-header text-center py-2" style="background: var(--dark-gradient); color: white;">
+                <h6 class="mb-0">
+                    <i class="fas fa-sign-in-alt me-2"></i>Already Have an Account?
+                </h6>
             </div>
-            <div class="card-body text-center">
-                <p class="text-muted mb-4">Access your dashboard and manage your profile</p>
+            <div class="card-body text-center py-3">
+                <p class="text-muted mb-3" style="font-size:0.9rem;">Access your dashboard and manage your profile</p>
                 <div class="d-grid gap-2">
-                    <a href="{% url 'login' %}" class="btn btn-primary btn-lg">
+                    <a href="{% url 'login' %}" class="btn btn-primary">
                         <i class="fas fa-sign-in-alt me-2"></i>Login to Your Account
                     </a>
-                    <a href="{% url 'password_reset_request' %}" class="btn btn-outline-secondary">
+                    <a href="{% url 'password_reset_request' %}" class="btn btn-outline-secondary btn-sm">
                         <i class="fas fa-key me-2"></i>Forgot Password?
                     </a>
                 </div>

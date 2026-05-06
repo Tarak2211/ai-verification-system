@@ -22,6 +22,25 @@
     <!-- Main Form -->
     <div class="row justify-content-center">
         <div class="col-xl-10">
+
+            <!-- Form-level errors (e.g. state not selected) -->
+            {% if form.errors %}
+            <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert" style="border-radius: 12px;">
+                <strong><i class="fas fa-exclamation-triangle me-2"></i>Please fix the following errors:</strong>
+                <ul class="mb-0 mt-2">
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endif %}
+
             <form method="post" class="needs-validation" novalidate>
                 {% csrf_token %}
                 
@@ -302,9 +321,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 <h6 class="mb-2"><i class="fas fa-key me-2"></i>Password Requirements</h6>
                 <ul class="list-unstyled mb-0 small">
                     <li class="mb-1"><i class="fas fa-check-circle text-success me-2"></i>8-128 characters long</li>
-                    <li class="mb-1"><i class="fas fa-check-circle text-success me-2"></i>Contains alphabetic characters</li>
-                    <li class="mb-1"><i class="fas fa-check-circle text-success me-2"></i>Contains special characters (!@#$%^&*)</li>
-                    <li class="mb-1"><i class="fas fa-check-circle text-success me-2"></i>Cannot contain username</li>
+                    <li class="mb-1"><i class="fas fa-check-circle text-success me-2"></i>Contains at least one letter (a-z)</li>
+                    <li class="mb-1"><i class="fas fa-check-circle text-success me-2"></i>Contains at least one number (0-9)</li>
+                    <li class="mb-1"><i class="fas fa-check-circle text-success me-2"></i>Cannot contain your username</li>
                     <li class="mb-0"><i class="fas fa-check-circle text-success me-2"></i>Not a common password</li>
                 </ul>
             </div>

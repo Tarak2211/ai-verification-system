@@ -1,145 +1,120 @@
 # User Management System
 
-A Django-based user management system with authentication, user profiles, and admin dashboard.
+A Django-based web application for managing users with role-based access control (RBAC), state-level data permissions, and stockist product data management.
 
-## Features
+---
 
-### 1. Authentication & Database Schema
-- **Registration Page**: Users can create new accounts
-- **Login Page**: Secure user authentication
-- **Custom User Model** with fields:
-  - UserID: Auto-incremental integer (Primary Key)
-  - Username: Unique identifier
-  - Password: Securely hashed
-  - Name: User's full name
-  - Email ID: Unique email address
+## What Was Built
 
-### 2. SuperAdmin & Dashboard
-- **SuperAdmin Role**: Full administrative privileges
-- **Admin Dashboard**: User management interface with:
-  - User table showing Username, Status, and Actions
-  - Toggle Active/Inactive status
-  - Edit user details
-  - Delete users
-  - User statistics
+### 1. Authentication
+- User registration with unique username and email validation
+- Login with inactive account detection and clear error messages
+- Logout
+- Home page accessible to both guests and logged-in users
 
-### 3. Data Constraints & Permissions
-- **Email Immutability**: Email cannot be changed once registered
-- **User Profile Editing**: Users can edit their name and username
-- **Admin Privileges**: Only SuperAdmin can modify sensitive fields
-- **Access Control**: Strict permission checks between Users and SuperAdmins
+### 2. Custom User Model
+- Auto-incremented user ID (primary key)
+- Fields: username, email, name, password, profile image, role, active status
+- Email is locked after registration (cannot be changed by the user)
+- Profile image upload with per-user file naming
 
-### 4. Password Security & Validation
-- **Strong Password Validators**:
-  - Minimum 8 characters, maximum 128 characters
-  - Must contain both letters and numbers (alphanumeric)
-  - Cannot be too similar to user information
-  - Cannot be a commonly used password
+### 3. Role-Based Access Control (RBAC)
+Three roles with different permissions:
 
-### 5. Update Logic
-- **Password Persistence**: When updating profile, blank password field preserves existing password
-- **Selective Updates**: Only modified fields are updated
+| Role | Can Do |
+|------|--------|
+| **Super Admin** | Full access — manage all users, reset passwords, bulk create, assign states |
+| **Sub Admin** | Manage regular users only — create, edit, toggle status, assign states |
+| **User** | View own profile, edit name/username/photo, access assigned state data |
 
-## Installation & Setup
+### 4. User Management (Admin Dashboard)
+- Paginated user table (10 per page) with username, email, name, role, status, assigned states
+- Create single user with role and state assignment
+- Bulk create users via CSV-style text input (`username,email,name,password`)
+- Edit user details (Super Admin can also change email and role)
+- Delete user (cannot delete own account)
+- Toggle active/inactive status via AJAX (no page reload)
+- Admin password reset (direct reset without email)
+- Dashboard statistics: total, active, and inactive user counts
 
-1. **Install Dependencies**:
-   ```bash
-   pip install django
-   ```
+### 5. Password Security
+- Minimum 8 characters, maximum 128
+- Must contain at least one letter and one special character
+- Cannot contain the username
+- Cannot reuse any of the last 3 passwords (tracked in `PasswordHistory`)
+- Self-service password reset via email with a 30-minute expiry token
 
-2. **Run Migrations**:
-   ```bash
-   python manage.py migrate
-   ```
+### 6. State-Based Data Access
+- Indian states stored as a `State` model with code and active flag
+- `StatePermission` junction table links users to states (with who granted it and when)
+- Permissions are cached per user for 5 minutes and invalidated on change
+- Super Admins and Sub Admins see all active states; regular users see only assigned states
 
-3. **Create SuperAdmin**:
-   ```bash
-   python manage.py create_superadmin
-   ```
+### 7. Stockist Data Module
+- **Stockist Dashboard** — summary statistics (total records, matched, mismatches, variance) with filters by month, validation status, and division
+- **Stockist List** — paginated list of stockists filtered by the user's accessible states
+- **Stockist Detail** — per-stockist product match records with month and validation filters
+- **Product Mismatch Report** — all non-matched records with breakdown by mismatch type
+- **Data Table** — comprehensive table (50 rows/page) with filters for month, validation, division, stockist code, state, and product name search
 
-4. **Run Development Server**:
-   ```bash
-   python manage.py runserver
-   ```
+### 8. Data Models
+- `CustomUser` — extended Django user with role and profile image
+- `State` — geographic state with code
+- `StatePermission` — user ↔ state access grant
+- `Stockist` — distributor linked to a state
+- `Division` — product division (e.g., Aesthetic, Cosmeceutical)
+- `Product` — master product catalog linked to a division
+- `StockistProductMatch` — PDF vs Excel product comparison records with match method (Exact/Fuzzy), variance, and validation status
+- `PasswordHistory` — stores last 3 password hashes per user
 
-5. **Access the Application**:
-   - Main Application: http://127.0.0.1:8000/
-   - Admin Interface: http://127.0.0.1:8000/admin/
+### 9. RBAC Decorators & Mixins
+- `role_required` decorator for function-based views
+- `can_manage_user_required` decorator to validate user management permissions
+- `RoleRequiredMixin` and `UserManagementMixin` for class-based views
+- All permission denials are logged to `logs/rbac.log`
 
-## Usage
+---
 
-### For Regular Users:
-1. **Register**: Create a new account at `/accounts/register/`
-2. **Login**: Access your account at `/accounts/login/`
-3. **Dashboard**: View your profile information
-4. **Edit Profile**: Update your name and username at `/profile/`
+## Tech Stack
 
-### For SuperAdmin:
-1. **Login**: Use SuperAdmin credentials
-2. **Admin Dashboard**: Manage all users from the dashboard
-3. **User Management**:
-   - View all users with pagination
-   - Toggle user active/inactive status
-   - Edit user details (including email)
-   - Delete users (except yourself)
+- **Backend**: Django 4.2
+- **Database**: SQLite (default)
+- **Frontend**: Bootstrap 5, Font Awesome 6
+- **Auth**: Django's built-in authentication + custom user model
+- **Other**: Django cache framework (state permission caching), AJAX for status toggles
 
-## Project Structure
+---
 
+## Setup
+
+```bash
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py create_superadmin
+python manage.py runserver
 ```
-user_management_system/
-├── accounts/                   # Main app
-│   ├── management/            # Custom management commands
-│   │   └── commands/
-│   │       └── create_superadmin.py
-│   ├── migrations/            # Database migrations
-│   ├── admin.py              # Admin interface configuration
-│   ├── forms.py              # Form definitions
-│   ├── models.py             # User model
-│   ├── validators.py         # Custom password validators
-│   ├── views.py              # View functions
-│   └── urls.py               # URL patterns
-├── templates/                 # HTML templates
-│   ├── base.html             # Base template
-│   └── accounts/             # Account-specific templates
-├── static/                   # Static files (CSS, JS, images)
-├── user_management_system/   # Project settings
-│   ├── settings.py           # Django settings
-│   ├── urls.py               # Main URL configuration
-│   └── wsgi.py               # WSGI configuration
-└── manage.py                 # Django management script
-```
+
+Access at `http://127.0.0.1:8000/`
+
+---
 
 ## Key URLs
 
-- `/` - Dashboard (redirects to login if not authenticated)
-- `/accounts/register/` - User registration
-- `/accounts/login/` - User login
-- `/accounts/logout/` - User logout
-- `/accounts/profile/` - User profile editing
-- `/dashboard/` - Main dashboard (different for users vs admins)
+| URL | Description |
+|-----|-------------|
+| `/` | Home page |
+| `/accounts/register/` | Registration |
+| `/accounts/login/` | Login |
+| `/accounts/profile/` | Edit own profile |
+| `/dashboard/` | Role-based dashboard |
+| `/accounts/create-user/` | Create user (admin) |
+| `/accounts/bulk-create-users/` | Bulk create (super admin) |
+| `/accounts/edit-user/<id>/` | Edit user (admin) |
+| `/accounts/delete-user/<id>/` | Delete user (super admin) |
+| `/accounts/admin-reset-password/<id>/` | Admin password reset |
+| `/accounts/rbac/users/` | RBAC user list |
+| `/accounts/stockist/dashboard/` | Stockist dashboard |
+| `/accounts/stockist/data/table/` | Stockist data table |
+| `/accounts/stockist/reports/mismatches/` | Mismatch report |
 
-## Security Features
 
-- CSRF protection on all forms
-- Password hashing using Django's built-in system
-- Session-based authentication
-- Permission-based access control
-- Input validation and sanitization
-- SQL injection protection through Django ORM
-
-## Admin Features
-
-- User status management (Active/Inactive)
-- Real-time status updates via AJAX
-- User search and pagination
-- Comprehensive user statistics
-- Safe user deletion (prevents self-deletion)
-- Email modification capabilities (admin only)
-
-## Technology Stack
-
-- **Backend**: Django 4.2.27
-- **Database**: SQLite (default, can be changed to PostgreSQL/MySQL)
-- **Frontend**: Bootstrap 5.1.3, Font Awesome 6.0.0
-- **JavaScript**: Vanilla JS for AJAX interactions
-- **Authentication**: Django's built-in authentication system

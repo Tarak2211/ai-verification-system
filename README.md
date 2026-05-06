@@ -120,31 +120,73 @@ Access at `http://127.0.0.1:8000/`
 
 ---
 
-## Screenshots
+---
 
-### Home Page
-![Home Page](screenshots/01_home.png)
+## 📸 Project Screenshots
 
-### Login Page
-![Login Page](screenshots/02_login.png)
+<div align="center">
 
-### Super Admin Dashboard
-![Super Admin Dashboard](screenshots/03_superadmin_dashboard.png)
+  <h3>🏠 Home Page</h3>
+  <img src="images/Homepage.png" width="800" alt="Home Page">
+  <br><br>
 
-### Admin Dashboard
-![Admin Dashboard](screenshots/04_admin_dashboard.png)
+  <h3>🔐 Login Page</h3>
+  <img src="images/Loginpage.png" width="800" alt="Login Page">
+  <br><br>
 
-### User Management Center
-![User Management](screenshots/05_user_management.png)
+  <h3>📊 Admin Welcome Dashboard</h3>
+  <img src="images/AdminWelcomeDashboard.png" width="800" alt="Admin Welcome Dashboard">
+  <br><br>
 
-### User Dashboard
-![User Dashboard](screenshots/06_user_dashboard.png)
+  <h3>👤 User Dashboard & Profile (2)</h3>
+  <img src="images/UserDashboard%26Profile(2).png" width="800" alt="User Dashboard & Profile 2">
+  <br><br>
 
-### Create New User
-![Create User](screenshots/07_create_user.png)
+  <h3>👤 User Dashboard & Profile (3)</h3>
+  <img src="images/UserDashboard%26Profile(3).png" width="800" alt="User Dashboard & Profile 3">
+  <br><br>
 
-### Stockist Product Matching Data
-![Stockist Data](screenshots/08_stockist_data.png)
+  <h3>➕ Create Users and Admins</h3>
+  <img src="images/Createusersandadmins.png" width="800" alt="Create users and admins">
+  <br><br>
 
-### Stockist Filters & Records
-![Stockist Filters](screenshots/09_stockist_filters.png)
+  <h3>⚡ Admin Assign Full State Automatically</h3>
+  <img src="images/Adminassignfullstateautomatically.png" width="800" alt="Admin assign">
+  <br><br>
+
+  <h3>📍 User Assign Only Selected States</h3>
+  <img src="images/userassignonlyselectedstates.png" width="800" alt="User state assignment">
+  <br><br>
+
+  <h3>🖼️ User Profile</h3>
+  <img src="images/Userprofile.png" width="800" alt="User profile">
+  <br><br>
+
+  <h3>📂 Database Page</h3>
+  <img src="images/Databasepage.png" width="800" alt="Database page">
+  <br><br>
+
+  <h3>📂 Database Page (2)</h3>
+  <img src="images/Databasepage(2).png" width="800" alt="Database page 2">
+  <br><br>
+
+  <h3>🛡️ Sub-admin Page</h3>
+  <img src="images/Sub-adminpage.png" width="800" alt="Sub-admin page">
+  <br><br>
+
+  <h3>👥 Users & Admin List</h3>
+  <img src="images/Users%26adminlist.png" width="800" alt="Users list">
+  <br><br>
+
+  <h3>👥 Users & Admin List (2)</h3>
+  <img src="images/Users%26adminslist.png" width="800" alt="Users list 2">
+  <br><br>
+
+  <h3>🔍 View Database (State Selected)</h3>
+  <img src="images/ViewDatabase.png" width="800" alt="View Database">
+  <br><br>
+
+  <h3>🔍 View Database (State Selected) (2)</h3>
+  <img src="images/ViewDatabase(2).png" width="800" alt="View Database 2">
+
+</div>
